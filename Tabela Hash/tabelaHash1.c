@@ -1,19 +1,24 @@
-// Tema do Estudo de Caso: Processamento de Dados de Sensores em um Sistema deMonitoramento IoT
+/*
+Tema do Estudo de Caso: Processamento de Dados de Sensores em um Sistema de Monitoramento IoT
 
+Sempre que uma máquina já cadastrada houver uma mudança muito brusca em alugns dos seus dados,
+há uma possibilidade de haver uma "suposta falha"  se não ela estará "normal"
+
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #define TAMANHO_HASH 10
 
-// Estrutura para representar uma máquina financeira
+// Estrutura para representar o processamento de dados de uma máquina
 typedef struct {
-    int idMaquina;               // ID único da máquina
-    float temperatura;          // Valor da máquina
-    int pressao;
-    int vibracao;
-    float hora;
-    char status[20];      // Status: "normal" ou "suspeita"
+    int idMaquina;              // ID único da máquina
+    float temperatura;          // Temperatura da máquina
+    int pressao;                // Pressão da máquina
+    int vibracao;               // Vibração da máquina
+    float hora;                 // Hora do processamento
+    char status[20];            // Status: "normal" ou "suposta falha"
 } Maquina;
 
 // Estrutura da Tabela Hash
@@ -39,10 +44,10 @@ Maquina *buscar(TabelaHash *tabela, int id) {
     return tabela->tabela[indice];  // Retorna a máquina encontrada
 }
 
-// Função para exibir máquinas suspeitas
+// Função para exibir máquinas com suposta falha
 void exibir_suspeitas(TabelaHash *tabela) {
     for (int i = 0; i < TAMANHO_HASH; i++) {
-        if (tabela->tabela[i] != NULL && strcmp(tabela->tabela[i]->status, "suspeita") == 0) {
+        if (tabela->tabela[i] != NULL && strcmp(tabela->tabela[i]->status, "suposta falha") == 0) {
             printf("Máquina ID: %d, Temperatura: %.2f, Pressão: %d, Vibração: %d, Hora: %f, Status: %s\n",
                    tabela->tabela[i]->idMaquina,
                    tabela->tabela[i]->temperatura,
@@ -65,7 +70,7 @@ int main() {
     Maquina Maquina1 = {101, 25.3, 33, 65, 123.5, "normal"};
     Maquina Maquina2 = {102, 32.9, 32, 60, 124.6, "normal"};
     Maquina Maquina3 = {103, 35.5, 39, 70, 127.0, "normal"};
-    Maquina Maquina4 = {101, 58.7, 56, 78, 127.8, "suspeita"};
+    Maquina Maquina4 = {101, 58.7, 56, 78, 127.8, "suposta falha"};
 
     // Insere as máquinas na tabela hash
     inserir(&tabela, &Maquina1);
@@ -83,7 +88,7 @@ int main() {
     }
 
     // Exibir todas as máquinas suspeitas
-    printf("\nMáquinas suspeitas:\n");
+    printf("\nMáquinas com suposta falha:\n");
     exibir_suspeitas(&tabela);
 
     return 0;
